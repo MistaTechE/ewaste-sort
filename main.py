@@ -107,55 +107,33 @@ class InventoryMatcherApp:
     if filename:
       self.output_file.set(filename)
 
+
   def process_files(self):
-    if not self.ewaste_file.get():
-      messagebox.showerror("Error", "Please select the eWaste CSV.")
-      return
-      
-    if not self.inventory_file.get():
-      messagebox.showerror("Error", "Please select the Inventory CSV.")
-      return
-      
-    if not self.output_file.get():
-      messagebox.showerror("Error", "Please select an output file.")
-      return
 
-      try:
-        self.status.config(text="Loading CSV files...")
-        ewaste = pd.read_csv(
-          self.ewaste_file.get(),
-          dtype=str
-        ).fillna("")
+    ewaste = pd.read_csv(
+        self.ewaste_file.get(),
+        dtype=str
+    ).fillna("")
 
-        inventory = pd.read_csv(
-          self.inventory_file.get(),
-          dtype=str
-        ).fillna("")
+    inventory = pd.read_csv(
+        self.inventory_file.get(),
+        dtype=str
+    ).fillna("")
 
-        ewaste["State Tag"] = ewaste["State Tag"].str.strip()
-        inventory["State Tag"] = inventory["State Tag"].str.strip()
+    # Clean State Tags
+    ewaste["State Tag"] = ewaste["State Tag"].str.strip()
+    inventory["State Tag"] = inventory["State Tag"].str.strip()
 
-        self.status.config(text="Matching records...")
+    # Match inventory records to eWaste State Tags
+    filtered_inventory = inventory[
+        inventory["State Tag"].isin(ewaste["State Tag"])
+    ]
 
-        filtered = inventory[
-          inventory["State Tag"].isin(ewaste["State Tag"])
-        ]
-
-        filtered.to_csv(
-          self.output_file.get(),
-          index=False
-        )
-
-        self.status.config(text="Finished")
-
-        messagebox.showinfo(
-          "Complete",
-          f"Found {len(filtered)} matching records.\n\n"
-          f"Output saved to:\n{self.output_file.get()}"
-        )
-
-      except Exception as e:
-        messagebox.showerror("Error", str(e))
+    # Write output CSV
+    filtered_inventory.to_csv(
+        self.output_file.get(),
+        index=False
+    )
 
 
 

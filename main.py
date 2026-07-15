@@ -25,61 +25,61 @@ class InventoryMatcherApp:
         font=("Segoe UI", 16, "bold")
     ).grid(row=0, column=0, columnspan=3, pady=15)
 
-      ttk.Label(self.root, text="eWaste CSV").grid(row=1, column=0, sticky="w", **padding)
+    ttk.Label(self.root, text="eWaste CSV").grid(row=1, column=0, sticky="w", **padding)
 
-      ttk.Entry(
-          self.root,
-          textvariable=self.ewaste_file,
-          width=60
-      ).grid(row=1, column=1)
+    ttk.Entry(
+        self.root,
+        textvariable=self.ewaste_file,
+        width=60
+    ).grid(row=1, column=1)
 
-      ttk.Button(
-          self.root,
-          text="Browse",
-          command=self.select_ewaste
-      ).grid(row=1, column=2)
+    ttk.Button(
+        self.root,
+        text="Browse",
+        command=self.select_ewaste
+    ).grid(row=1, column=2)
 
-      ttk.Label(self.root, text="Inventory CSV").grid(row=2, column=0, sticky="w", **padding)
+    ttk.Label(self.root, text="Inventory CSV").grid(row=2, column=0, sticky="w", **padding)
 
-      ttk.Entry(
-          self.root,
-          textvariable=self.inventory_file,
-          width=60
-      ).grid(row=2, column=1)
+    ttk.Entry(
+        self.root,
+        textvariable=self.inventory_file,
+        width=60
+    ).grid(row=2, column=1)
 
-      ttk.Button(
-          self.root,
-          text="Browse",
-          command=self.select_inventory
-      ).grid(row=2, column=2)
+    ttk.Button(
+        self.root,
+        text="Browse",
+        command=self.select_inventory
+    ).grid(row=2, column=2)
 
-      ttk.Label(self.root, text="Output CSV").grid(row=3, column=0, sticky="w", **padding)
+    ttk.Label(self.root, text="Output CSV").grid(row=3, column=0, sticky="w", **padding)
 
-      ttk.Entry(
-          self.root,
-          textvariable=self.output_file,
-          width=60
-      ).grid(row=3, column=1)
+    ttk.Entry(
+        self.root,
+        textvariable=self.output_file,
+        width=60
+    ).grid(row=3, column=1)
 
-      ttk.Button(
-          self.root,
-          text="Save As",
-          command=self.select_output
-      ).grid(row=3, column=2)
+    ttk.Button(
+        self.root,
+        text="Save As",
+        command=self.select_output
+    ).grid(row=3, column=2)
 
-      ttk.Button(
-          self.root,
-          text="Process Files",
-          command=self.process_files
-      ).grid(row=4, column=0, columnspan=3, pady=20)
+    ttk.Button(
+        self.root,
+        text="Process Files",
+        command=self.process_files
+    ).grid(row=4, column=0, columnspan=3, pady=20)
 
-      self.status = ttk.Label(
-          self.root,
-          text="Ready",
-          foreground="blue"
-      )
+    self.status = ttk.Label(
+        self.root,
+        text="Ready",
+        foreground="blue"
+    )
 
-      self.status.grid(row=5, column=0, columnspan=3)
+    self.status.grid(row=5, column=0, columnspan=3)
 
   def select_ewaste(self):
     filename = filedialog.askopenfilename(

@@ -9,11 +9,10 @@ class InventoryMatcherApp:
   def __init__(self, root):
     self.root = root
     self.root.title("eWaste Inventory Matcher")
-    self.root.geometry("900x300")
+    self.root.geometry("900x250")
     self.root.resizable(False, False)
     self.ewaste_file = tk.StringVar()
     self.inventory_file = tk.StringVar()
-    self.output_file = tk.StringVar()
     self.build_gui()
 
   def build_gui(self):
@@ -53,19 +52,6 @@ class InventoryMatcherApp:
         command=self.select_inventory
     ).grid(row=2, column=2)
 
-    ttk.Label(self.root, text="Output CSV").grid(row=3, column=0, sticky="w", **padding)
-
-    ttk.Entry(
-        self.root,
-        textvariable=self.output_file,
-        width=60
-    ).grid(row=3, column=1)
-
-    ttk.Button(
-        self.root,
-        text="Save As",
-        command=self.select_output
-    ).grid(row=3, column=2)
 
     ttk.Button(
         self.root,
@@ -97,16 +83,6 @@ class InventoryMatcherApp:
     if filename:
       self.inventory_file.set(filename)
 
-  def select_output(self):
-    filename = filedialog.asksaveasfilename(
-      title="Save Output As",
-      defaultextension=".csv",
-      filetypes=[("CSV Files", "*.csv")],
-      initialfile="Filtered_Inventory.csv"
-    )
-    if filename:
-      self.output_file.set(filename)
-
 
   def process_files(self):
 
@@ -129,10 +105,15 @@ class InventoryMatcherApp:
         inventory["State Tag"].isin(ewaste["State Tag"])
     ]
 
-    # Write output CSV
+    # Write output CSV next to the inventory file
+    output_file = os.path.join(
+      os.path.dirname(self.inventory_file.get()),
+      "Filtered_Inventory.csv"
+    )
+
     filtered_inventory.to_csv(
-        self.output_file.get(),
-        index=False
+      output_file,
+      index=False
     )
 
 

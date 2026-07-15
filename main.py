@@ -9,7 +9,7 @@ class InventoryMatcherApp:
   def __init__(self, root):
     self.root = root
     self.root.title("eWaste Inventory Matcher")
-    self.root.geometry("650x275")
+    self.root.geometry("900x300")
     self.root.resizable(False, False)
     self.ewaste_file = tk.StringVar()
     self.inventory_file = tk.StringVar()

@@ -105,6 +105,27 @@ class InventoryMatcherApp:
         inventory["State Tag"].isin(ewaste["State Tag"])
     ]
 
+    # Keep only required columns
+    filtered_inventory = filtered_inventory[
+      [
+        "State Tag",
+        "PROPERTY #",
+        "DESCRIPTION",
+        "SERIAL #",
+        "P.O. #",
+        "PROG ID",
+        "COST",
+        "DATE",
+        "VENDOR",
+        "Request for Disposal"
+      ]
+    ]
+
+    # Add disposal reason to every row
+    filtered_inventory["Request for Disposal"] = (
+      "Old, broken, may be used for parts"
+    )
+
     # Write output CSV next to the inventory file
     output_file = os.path.join(
       os.path.dirname(self.inventory_file.get()),

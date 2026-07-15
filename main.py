@@ -96,13 +96,26 @@ class InventoryMatcherApp:
         dtype=str
     ).fillna("")
 
-    # Clean State Tags
-    ewaste["State Tag"] = ewaste["State Tag"].str.strip()
-    inventory["State Tag"] = inventory["State Tag"].str.strip()
+    # Normalize State Tags for matching
+    ewaste["Match_Tag"] = (
+      ewaste["State Tag"]
+      .astype(str)
+      .str.strip()
+      .str.upper()
+      .str.replace("E273", "", regex=False)
+    )
 
-    # Match inventory records to eWaste State Tags
+    inventory["Match_Tag"] = (
+      inventory["State Tag"]
+      .astype(str)
+      .str.strip()
+      .str.upper()
+      .str.replace("E273", "", regex=False)
+    )
+
+    # Match inventory records using normalized tags
     filtered_inventory = inventory[
-        inventory["State Tag"].isin(ewaste["State Tag"])
+      inventory["Match_Tag"].isin(ewaste["Match_Tag"])
     ]
 
     # Keep only required columns
@@ -117,9 +130,43 @@ class InventoryMatcherApp:
         "COST",
         "DATE",
         "VENDOR",
-        "Request for Disposal"
+        "Request for Disposal",
+        "Match_Tag"
       ]
     ]
+
+    # Find tags that were not found in inventory
+    missing_tags = ewaste[
+      ~ewaste["Match_Tag"].isin(inventory["Match_Tag"])
+    ].copy()
+
+    # Create missing inventory rows
+    if not missing_tags.empty:
+
+      missing_rows = pd.DataFrame(
+        "?",
+        index=range(len(missing_tags)),
+        columns=filtered_inventory.columns
+      )
+
+      # Fill required fields
+      missing_rows["State Tag"] = (
+        "E273" + missing_tags["Match_Tag"]
+      )
+
+      # Add missing rows to output
+      filtered_inventory = pd.concat(
+        [filtered_inventory, missing_rows],
+        ignore_index=True
+      )
+
+    filtered_inventory["State Tag"] = (
+      "E273" + filtered_inventory["Match_Tag"]
+    )
+    
+    filtered_inventory = filtered_inventory.drop(
+      columns=["Match_Tag"]
+    )
 
     # Add disposal reason to every row
     filtered_inventory["Request for Disposal"] = (

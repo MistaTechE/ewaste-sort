@@ -122,37 +122,37 @@ class InventoryMatcherApp:
 
       try:
         self.status.config(text="Loading CSV files...")
-          ewaste = pd.read_csv(
-            self.ewaste_file.get(),
-            dtype=str
-          ).fillna("")
+        ewaste = pd.read_csv(
+          self.ewaste_file.get(),
+          dtype=str
+        ).fillna("")
 
-          inventory = pd.read_csv(
-            self.inventory_file.get(),
-            dtype=str
-          ).fillna("")
+        inventory = pd.read_csv(
+          self.inventory_file.get(),
+          dtype=str
+        ).fillna("")
 
-          ewaste["State Tag"] = ewaste["State Tag"].str.strip()
-          inventory["State Tag"] = inventory["State Tag"].str.strip()
+        ewaste["State Tag"] = ewaste["State Tag"].str.strip()
+        inventory["State Tag"] = inventory["State Tag"].str.strip()
 
-          self.status.config(text="Matching records...")
+        self.status.config(text="Matching records...")
 
-          filtered = inventory[
-            inventory["State Tag"].isin(ewaste["State Tag"])
-          ]
+        filtered = inventory[
+          inventory["State Tag"].isin(ewaste["State Tag"])
+        ]
 
-          filtered.to_csv(
-            self.output_file.get(),
-            index=False
-          )
+        filtered.to_csv(
+          self.output_file.get(),
+          index=False
+        )
 
-          self.status.config(text="Finished")
+        self.status.config(text="Finished")
 
-          messagebox.showinfo(
-            "Complete",
-            f"Found {len(filtered)} matching records.\n\n"
-            f"Output saved to:\n{self.output_file.get()}"
-          )
+        messagebox.showinfo(
+          "Complete",
+          f"Found {len(filtered)} matching records.\n\n"
+          f"Output saved to:\n{self.output_file.get()}"
+        )
 
       except Exception as e:
         messagebox.showerror("Error", str(e))

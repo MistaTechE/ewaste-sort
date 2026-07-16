@@ -150,7 +150,7 @@ class InventoryMatcherApp:
       )
 
       # Fill required fields
-      missing_rows["Match_Tag"] = missing_tags["Match_Tag"]
+      missing_rows["Match_Tag"] = missing_tags["Match_Tag"].values
 
       missing_rows["State Tag"] = (
         "E273" + missing_tags["Match_Tag"]
